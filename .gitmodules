@@ -1,0 +1,3 @@
+[submodule "cvbi"]
+	path = cvbi
+	url = https://github.com/program-for-advanced-immune-bioimaging/cvbi/
