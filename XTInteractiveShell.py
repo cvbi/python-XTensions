@@ -32,7 +32,7 @@ def XTInteractiveShell(aImarisId):
     # Check if the object is valid
     if vImaris is None:
         print "Could not connect to Imaris!"
-        time.sleep(5)
+        time.sleep(2)
         return
 
     # Get the dataset
@@ -41,7 +41,6 @@ def XTInteractiveShell(aImarisId):
     # Check if the object is valid
     if vDataSet is None:
         print "Warning: No dataset!\n"
-        time.sleep(5)
 
     vars = globals().copy()
     vars.update(locals())
