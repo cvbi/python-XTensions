@@ -13,22 +13,20 @@
 
 import time
 import ImarisLib
-import BridgeLib
 
-
-from cvbi.gui import create_window_from_list,get_output_dir
-from cvbi.statistics import get_imaris_statistics
+from cvbi.base_imaris.objects import GetSurpassObjects
+from cvbi.gui import create_window_from_list, get_output_dir
+from cvbi.base_imaris.stats import get_imaris_statistics
 
 
 # Get All Statistics
 
-
+time.sleep(10)
 
 def XT_GetStats(aImarisId):
 
     vImarisLib = ImarisLib.ImarisLib()
     vImaris = vImarisLib.GetApplication(aImarisId)
-    vDataSet = vImaris.GetDataSet()
 
     print('''
     ####################################################################################
@@ -37,16 +35,23 @@ def XT_GetStats(aImarisId):
     ''')
     time.sleep(5)
 
-    choose_object_type_from = ["spots", "surfaces", "filaments", "cells"]
-    object_type = create_window_from_list(choose_object_type_from)
+    object_type_list = ["spots", "surfaces", "filaments", "cells"]
+    object_type = create_window_from_list(object_list=object_type_list, window_title='Select one object type')
 
-    imaris_objects = BridgeLib.GetSurpassObjects(vImaris, object_type)
-    choose_object_from = imaris_objects.keys()
-    object_name = create_window_from_list(choose_object_from)
-    all_stats = get_imaris_statistics(imaris_objects, object_name)
+    print('Object type Selected : '+object_type)
+
+    objects = GetSurpassObjects(vImaris=vImaris, search=object_type)
+    objects_list = objects.keys()
+    object_name = create_window_from_list(object_list=objects_list, window_title='Select one object')
+    print('Object Selected : '+object_name)
+
+    all_stats = get_imaris_statistics(vImaris=vImaris, object_type=object_type, object_name=object_name)
+
+    imaris_file = vImaris.GetCurrentFileName()
+    imaris_name = imaris_file.split('\\')[-1].split('.')[0]
 
     output_dir = get_output_dir()
-    output_file = object_name+'.txt'
+    output_file = object_name+str(imaris_name)+'.txt'
     output_path =output_dir+'/'+output_file
     all_stats.to_csv(output_path, index=False, sep='|')
 
