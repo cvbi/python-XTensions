@@ -4,9 +4,11 @@
 #
 #    <CustomTools>
 #      <Menu name = "Python plugins">
-#       <Item name="Get All Statistics" icon="Python" tooltip="Get all Statistics from Imaris for a selectd cell surface">
-#         <Command>PythonXT::XT_GetStats(%i)</Command>
-#       </Item>
+#          <Submenu name = "Metrics">
+#               <Item name="Get All Imaris Statistics" icon="Python" tooltip="Get all Statistics from Imaris for a selectd surface">
+#               <Command>PythonXT::XT_GetStats(%i)</Command>
+#               </Item>
+#           </Submenu>
 #      </Menu>
 #    </CustomTools>
 
@@ -20,8 +22,6 @@ from cvbi.base_imaris.stats import get_imaris_statistics
 
 
 # Get All Statistics
-
-time.sleep(10)
 
 def XT_GetStats(aImarisId):
 
