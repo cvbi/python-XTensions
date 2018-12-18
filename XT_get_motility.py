@@ -4,9 +4,11 @@
 #
 #    <CustomTools>
 #      <Menu name = "Python plugins">
-#       <Item name="Get Motility for tracks" icon="Python" tooltip="Get motility values and associated data for all tracks">
-#         <Command>PythonXT::XT_get_motility(%i)</Command>
-#       </Item>
+#          <Submenu name = "Metrics">
+#               <Item name="Get Motility for tracks" icon="Python" tooltip="Get motility values and associated data for all tracks">
+#                 <Command>PythonXT::XT_get_motility(%i)</Command>
+#               </Item>
+#           </Submenu>
 #      </Menu>
 #    </CustomTools>
 
