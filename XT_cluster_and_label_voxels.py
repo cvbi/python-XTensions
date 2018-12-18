@@ -5,7 +5,7 @@
 #    <CustomTools>
 #      <Menu name = "Python plugins">
 #       <Submenu name = "Clustering">
-#        <Item name="Cluster and assign label" icon="Python" tooltip="Cluster voxels and assign labels">
+#        <Item name="Cluster and label voxels" icon="Python" tooltip="Cluster voxels and assign labels">
 #         <Command>PythonXT::XT_cluster_and_label_voxels(%i)</Command>
 #        </Item>
 #       </Submenu>
