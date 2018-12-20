@@ -63,15 +63,6 @@ def XT_get_fiber_angle(aImarisId):
     print('Channel Created : '+ch_out_name)
     time.sleep(5)
 
-    # Ask user if rotation is to be done
-
-    rotate = 0
-    rotation_list = ['Yes', 'No']
-    answer = create_window_from_list(rotation_list, window_title='Are you calculating angle after rotation?')
-
-    if answer =='yes':
-        rotate = 1
-
     # Get other parameters
 
     window_size = 13
@@ -93,9 +84,6 @@ def XT_get_fiber_angle(aImarisId):
             # Create cutoff image
 
             nearest_image_cutoff = nearest_image.copy()
-            if rotate:
-                nearest_image_cutoff = np.rot90(nearest_image_cutoff)
-
             nearest_image_cutoff[nearest_image_cutoff <= cutoff] = 0.0
             angle_array, X, Y, U, V = get_image_angles(im=nearest_image_cutoff + 1e-6,
                                                        window_size=window_size,
