@@ -101,13 +101,12 @@ def XT_cluster_cells(aImarisId):
     t_cluster = 1
     if nT > 1:
         t_cluster = create_input_window(default=t_cluster,
-                                        w=400,
-                                        h=500,
+                                        w=400, h=500,
                                         window_title='Time',
                                         window_text='Provide an integer time point for determining voxel clusters.'
                                                     'For others, this intensity distribution is used as reference.',
                                         valid_range=[1, nT])
-    t_cluster = np.int64(t_cluster)-1
+    t_cluster = np.int64(t_cluster)
     time.sleep(2)
 
     # Definer parameters
@@ -118,6 +117,7 @@ def XT_cluster_cells(aImarisId):
     window_text = 'Radius is used to define a sphere around every cell. ' \
                   'This value is used to get localized cell density.'
     radius = create_input_window(default=radius,
+                                 w=400, h=500,
                                  valid_range=(0, nX),
                                  window_title='Provide a radius',
                                  window_text=window_text)
@@ -126,6 +126,7 @@ def XT_cluster_cells(aImarisId):
     window_text = 'Minimum number of cells in radius={rad},' \
                   'required to label the region as part of the nearest cluster.'.format(rad=r)
     density = create_input_window(default=density,
+                                  w=400, h=500,
                                   valid_range=(1, 1000),
                                   window_title='Provide minimum density',
                                   window_text=window_text)
@@ -158,11 +159,11 @@ def XT_cluster_cells(aImarisId):
     print('\n Prediction complete.\n')
     time.sleep(2)
 
-    imaris_file = vImaris.GetCurrentFileName()
-    output_dir = get_output_dir(w=300, h=100)
+    output_dir = get_output_dir(w=300, h=200)
     print('Selected Directory path : {dir}'.format(dir=output_dir))
     time.sleep(2)
 
+    imaris_file = vImaris.GetCurrentFileName()
     imaris_name = imaris_file.split('\\')[-1].split('.')[0]
     output_file = str(imaris_name) + '_' + object_name + '_clustered.txt'
     print('\n Current name : \n {}'.format(output_file))
