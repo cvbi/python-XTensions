@@ -76,6 +76,7 @@ def XT_subtract_channel(aImarisId):
         data_channel_02 = np.array(data_channel_list_02)
 
         data_out = data_channel_01-data_channel_02
+        data_out[data_out<0] = 0
         data_out_list = data_out.tolist()
         vDataSet.SetDataVolumeFloats(aData=data_out_list, aIndexC=ch_out-1, aIndexT=ti)
         time.sleep(3)
