@@ -18,7 +18,7 @@ import ImarisLib
 
 
 import numpy as np
-from cvbi.gui import create_window_from_list, create_input_window
+from cvbi.gui import create_window_from_list, create_window_for_input
 
 from tqdm import tqdm
 from sklearn.cluster import KMeans
@@ -70,12 +70,12 @@ def XT_cluster_and_label_voxels(aImarisId):
     # Select Number of clusters
 
     n_clusters = 2
-    n_clusters = create_input_window(default=n_clusters,
-                                     w=300,
-                                     h=500,
-                                     window_title='Clusters',
-                                     window_text='Provide number of clusters to segment into',
-                                     valid_range=[2, 25])
+    n_clusters = create_window_for_input(default=n_clusters,
+                                         w=300,
+                                         h=500,
+                                         window_title='Clusters',
+                                         window_text='Provide number of clusters to segment into',
+                                         valid_range=[2, 25])
     n_clusters = np.int64(n_clusters)
     time.sleep(2)
 
@@ -83,13 +83,13 @@ def XT_cluster_and_label_voxels(aImarisId):
 
     t_cluster = 1
     if nT > 1:
-        t_cluster = create_input_window(default=t_cluster,
-                                        w=400,
-                                        h=500,
-                                        window_title='Time',
-                                        window_text='Provide an integer time point for determining voxel clusters.'
+        t_cluster = create_window_for_input(default=t_cluster,
+                                            w=400,
+                                            h=500,
+                                            window_title='Time',
+                                            window_text='Provide an integer time point for determining voxel clusters.'
                                                     'For others, this intensity distribution is used as reference.',
-                                        valid_range=[1, nT])
+                                            valid_range=[1, nT])
     t_cluster = np.int64(t_cluster)-1
 
     print('Clustering Channel : '+str(ch_in_name))
