@@ -1,4 +1,4 @@
-# Clustering Voxels Extension
+# Clustering Cells Extension
 #
 #  Copyright (C) 2018 Nilesh Patil <nilesh.patil@rochester.edu>, MIT license
 #
@@ -15,12 +15,14 @@
 
 import time
 import ImarisLib
+import os
 
 from cvbi.base_imaris.objects import GetSurpassObjects
 from cvbi.base_imaris.stats import get_imaris_statistics
 from cvbi.gui import *
 
 import numpy as np
+from sklearn.externals import joblib
 from sklearn.cluster import DBSCAN
 
 
@@ -74,7 +76,7 @@ def XT_cluster_cells(aImarisId):
                                           w=300,
                                           h=len(object_type_list)*40,
                                           window_title='Select one object')
-    print('\n Object type Selected : ' + object_type)
+    print('\nObject type Selected : ' + object_type)
     time.sleep(1)
 
     # Select Object
@@ -85,27 +87,29 @@ def XT_cluster_cells(aImarisId):
                                           w=300,
                                           h=len(objects_list)*40,
                                           window_title='Select one object')
-    print('\n Object Selected : ' + object_name)
+    print('\nObject Selected : ' + object_name)
     time.sleep(1)
 
     # Get statistics for selected surface
 
+    print('\nAcquiring Statistics from Imaris for {object}'.format(object=object_name))
+    time.sleep(2)
     all_stats = get_imaris_statistics(vImaris=vImaris,
                                       object_type=object_type,
                                       object_name=object_name)
-    print('\n Statistics Acquired.')
+    print('\nStatistics Acquired.')
     time.sleep(2)
 
     # Select time point to cluster
 
     t_cluster = 1
     if nT > 1:
-        t_cluster = create_input_window(default=t_cluster,
-                                        w=400, h=500,
-                                        window_title='Time',
-                                        window_text='Provide an integer time point for determining voxel clusters.'
+        t_cluster = create_window_for_input(default=t_cluster,
+                                            w=400, h=500,
+                                            window_title='Time',
+                                            window_text='Provide an integer time point for determining voxel clusters.'
                                                     'For others, this intensity distribution is used as reference.',
-                                        valid_range=[1, nT])
+                                            valid_range=[1, nT])
     t_cluster = np.int64(t_cluster)
     time.sleep(2)
 
@@ -116,26 +120,26 @@ def XT_cluster_cells(aImarisId):
 
     window_text = 'Radius is used to define a sphere around every cell. ' \
                   'This value is used to get localized cell density.'
-    radius = create_input_window(default=radius,
-                                 w=400, h=500,
-                                 valid_range=(0, nX),
-                                 window_title='Provide a radius',
-                                 window_text=window_text)
+    radius = create_window_for_input(default=radius,
+                                     w=400, h=500,
+                                     valid_range=(0, nX),
+                                     window_title='Provide a radius',
+                                     window_text=window_text)
     r = np.int64(radius)
 
     window_text = 'Minimum number of cells in radius={rad},' \
                   'required to label the region as part of the nearest cluster.'.format(rad=r)
-    density = create_input_window(default=density,
-                                  w=400, h=500,
-                                  valid_range=(1, 1000),
-                                  window_title='Provide minimum density',
-                                  window_text=window_text)
+    density = create_window_for_input(default=density,
+                                      w=400, h=500,
+                                      valid_range=(1, 1000),
+                                      window_title='Provide minimum density',
+                                      window_text=window_text)
     n = np.int64(density)
 
-    print('\n Clustering cells using the following parameters :\n'
+    print('\nClustering cells using the following parameters :\n\n'
           'T       = {t}\n'
           'radius  = {rad}, \n'
-          'density = {den}'.format(t=t_cluster+1, rad=r, den=n))
+          'density = {den} \n'.format(t=t_cluster, rad=r, den=n))
     time.sleep(2)
 
     # Cluster Cells
@@ -143,40 +147,52 @@ def XT_cluster_cells(aImarisId):
     data_tn = all_stats.copy()
     data_in = data_tn.loc[data_tn.time == t_cluster, ['Position X', 'Position Y', 'Position Z']].copy()
     X = data_in.values
-    db = DBSCAN(eps=r, min_samples=n)
-    db.fit(X)
+    clusterer = DBSCAN(eps=r, min_samples=n)
+    clusterer.fit(X)
 
-    print('\n Clustering Complete. Labelling time points started. \n')
+    print('\nClustering Complete. Labelling time points started. \n')
     time.sleep(2)
 
     # Predict for all time points
 
     data_in = data_tn.loc[:, ['Position X', 'Position Y', 'Position Z']].copy()
     X = data_in.values
-    labels = dbscan_predict(model=db, X=X)
+    labels = dbscan_predict(model=clusterer, X=X)
     all_stats.loc[:, 'cluster_label'] = labels
 
-    print('\n Prediction complete.\n')
-    time.sleep(2)
-
-    output_dir = get_output_dir(w=300, h=200)
-    print('Selected Directory path : {dir}'.format(dir=output_dir))
+    print('\nPrediction complete.\n')
     time.sleep(2)
 
     imaris_file = vImaris.GetCurrentFileName()
-    imaris_name = imaris_file.split('\\')[-1].split('.')[0]
-    output_file = str(imaris_name) + '_' + object_name + '_clustered.txt'
-    print('\n Current name : \n {}'.format(output_file))
-    time.sleep(2)
-    output_file = create_input_window(default=output_file,
-                                      w=300, h=100,
-                                      window_text='Modify the file name for any changes',
-                                      window_title='Provide your output file name')
+    imaris_dir = os.path.dirname(imaris_file)
+    imaris_name = os.path.basename(imaris_file)
+    output_dir = get_output_dir(initial_dir=imaris_dir, w=300, h=200)
 
-    output_path = output_dir + '\\' + output_file
-    print('\n You have chosen to save your file here : \n {}'.format(output_path))
+    print('\nSelected Directory path : {dir}'.format(dir=output_dir))
     time.sleep(2)
-    all_stats.to_csv(output_path, index=False, sep='|')
+
+    output_model = imaris_name + '_' + object_name + '_model.joblib'
+    output_file = imaris_name + '_' + object_name + '_clustered.txt'
+    print('\nCurrent name : \n {}'.format(output_file))
+    time.sleep(2)
+
+    output_file = create_window_for_input(default=output_file,
+                                          w=300, h=100,
+                                          window_text='Modify the file name for any changes',
+                                          window_title='Provide your output file name')
+
+    output_path_model = output_dir + '/' + output_model
+    output_path_stats = output_dir + '/' + output_file
+    print('\nYou have chosen to save your files here : \n {m} \n {f}'.format(m=output_path_model, f=output_path_stats))
+    time.sleep(2)
+
+    try:
+        joblib.dump(value=clusterer, filename=output_path_model)
+        all_stats.to_csv(path_or_buf=output_path_stats, index=False, sep='|')
+    except:
+        print('Model object could not be saved. This usually happens when the OS does not support this operation.')
+        print('We will save a statistics file with cluster label as the last column now.')
+        time.sleep(3)
 
     print('''
      ####################################################################################
