@@ -15,6 +15,7 @@
 
 import time
 import ImarisLib
+import os
 
 from cvbi.base_imaris.objects import GetSurpassObjects
 from cvbi.gui import create_window_from_list, get_output_dir
@@ -48,11 +49,12 @@ def XT_GetStats(aImarisId):
     all_stats = get_imaris_statistics(vImaris=vImaris, object_type=object_type, object_name=object_name)
 
     imaris_file = vImaris.GetCurrentFileName()
-    imaris_name = imaris_file.split('\\')[-1].split('.')[0]
+    imaris_dir = os.path.dirname(imaris_file)
+    imaris_name = os.path.basename(imaris_file)
 
-    output_dir = get_output_dir()
-    output_file = object_name+str(imaris_name)+'.txt'
-    output_path =output_dir+'/'+output_file
+    output_dir = get_output_dir(initial_dir=imaris_dir)
+    output_file = imaris_name+'_'+object_name+'_statistics.txt'
+    output_path = output_dir+'/'+output_file
     all_stats.to_csv(output_path, index=False, sep='|')
 
     print('''
