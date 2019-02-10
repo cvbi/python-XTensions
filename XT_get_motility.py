@@ -15,6 +15,7 @@
 
 import time
 import ImarisLib
+import os
 
 from cvbi.base_imaris.objects import GetSurpassObjects
 from cvbi.gui import create_window_from_list, get_output_dir
@@ -58,7 +59,7 @@ def XT_get_motility(aImarisId):
     print('\n Calculating Motility coefficients for : '+object_name)
     time.sleep(2)
     try:
-        data_motility = data_stats.groupby('trackID').apply(lambda df: get_motility(data_cell=df, time_limit=600))
+        data_motility = data_stats.groupby('trackID').apply(lambda df: get_motility(data_cell=df, time_limit=660))
         data_motility.reset_index(drop=True, inplace=True)
     except:
         print('\n Failure to calculate motility values \n')
@@ -70,12 +71,23 @@ def XT_get_motility(aImarisId):
 
     try:
         imaris_file = vImaris.GetCurrentFileName()
-        imaris_name = imaris_file.split('\\')[-1].split('.')[0]
+        imaris_dir = os.path.dirname(imaris_file)
+        imaris_name = os.path.basename(imaris_file)
+
         data_motility['File'] = imaris_name
-        output_dir = get_output_dir()
+        data_motility_subset = data_motility.copy()
+        condition = data_motility_subset.r2.gt(0.8).values
+        data_motility_subset = data_motility_subset.loc[condition, :]
+
+        output_dir = get_output_dir(initial_dir=imaris_dir)
         output_file = imaris_name+'_'+object_name+'_motility.txt'
+        output_file_subset = imaris_name+'_'+object_name+'_motility_subset.txt'
+
         output_path = output_dir+'/'+output_file
+        output_path_subset = output_dir+'/'+output_file_subset
+
         data_motility.to_csv(output_path, index=False, sep='|')
+        data_motility_subset.to_csv(output_path_subset, index=False, sep='|')
     except:
         print('''
         Calculations finished successfully but there was an error in saving your dataset. \n
@@ -83,6 +95,7 @@ def XT_get_motility(aImarisId):
         Please do not forget to save your work.\n
         Please contact Nilesh Patil : nilesh.patil@rochester.edu if this problem persists \n
         ''')
+        time.sleep(5)
         return
 
     print('''
