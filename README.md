@@ -21,6 +21,6 @@ Dependency list ( to be kept updated as more XTensions are added) :
     6. Scikit Image
     7. tqdm
 
-[Imaris](!http://www.bitplane.com/imaris) provides an inbuilt package `ImarisLib` to use for connecting and working with different structures within Imaris. Currently, Imaris doesn't support python3 (ugghh.....I know, right?).
+[Imaris](!http://www.bitplane.com/imaris) provides an inbuilt package `ImarisLib` to use for connecting and working with different structures within Imaris. Currently, Imaris does not support python3 (ugghh.....I know, right?).
  
 Please use [anaconda](!https://www.anaconda.com) to create a Python 2.7 environment and use the python executable in this environment folder as python executable for Imaris. As far as I can test, there are no choices specific to python2 in our extensions and when Bitplane starts supporting python3, all XTensions should be transferable with minimal changes. 
