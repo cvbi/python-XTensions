@@ -18,7 +18,7 @@ import time
 import ImarisLib
 
 from cvbi.base_imaris.objects import GetSurpassObjects
-from cvbi.gui import create_window_from_list, get_output_dir
+from cvbi.gui import *
 from cvbi.base_imaris.stats import get_imaris_statistics
 
 
@@ -48,17 +48,20 @@ def XT_GetStats(aImarisId):
 
     objects = GetSurpassObjects(vImaris=vImaris, search=object_type)
     objects_list = objects.keys()
-    object_name = create_window_from_list(object_list=objects_list,
-                                          window_title='Select one object',
-                                          w = 500, h = 50*len(objects_list))
-    print('Object Selected : '+object_name)
+    objects_selected = create_window_for_multiple_selection(object_list = objects_list,
+                                                            window_title = 'Select surfaces get statistics.',
+                                                            w = 500, h = 50*len(objects_list))
+    print('\nObjects Selected : \n')
+    print(objects_selected)
+    time.sleep(3)
 
-    all_stats = get_imaris_statistics(vImaris=vImaris, object_type=object_type, object_name=object_name)
+    output_dir = get_output_dir(initial_dir = imaris_dir)
 
-    output_dir = get_output_dir(initial_dir=imaris_dir)
-    output_file = imaris_name+'_'+object_name+'_statistics.txt'
-    output_path = output_dir+'/'+output_file
-    all_stats.to_csv(output_path, index=False, sep='|')
+    for object_name in objects_selected:
+        all_stats = get_imaris_statistics(vImaris=vImaris, object_type=object_type, object_name=object_name)
+        output_file = imaris_name+'_'+object_name+'_statistics.txt'
+        output_path = output_dir+'/'+output_file
+        all_stats.to_csv(output_path, index=False, sep='|')
 
     print('''
     ####################################################################################
