@@ -12,13 +12,14 @@
 #      </Menu>
 #    </CustomTools>
 
+import os
 import time
 import ImarisLib
-import BridgeLib
 from tqdm import tqdm
 
 
 import numpy as np
+import pandas as pd
 from cvbi.gui import *
 
 # Template Extension description for function
@@ -30,10 +31,14 @@ def XTensions_template(aImarisId):
     vImaris = vImarisLib.GetApplication(aImarisId)
     vDataSet = vImaris.GetDataSet()
 
+    imaris_file = vImaris.GetCurrentFileName()
+    imaris_dir  = os.path.dirname(imaris_file)
+    imaris_name = os.path.basename(imaris_file)
+
     print('''
-    ####################################################################################
-    ###########################     Extension started     ##############################
-    ####################################################################################
+    ##################################################################
+    ###################     Extension started     ####################
+    ##################################################################
     ''')
     time.sleep(5)
 
@@ -42,10 +47,10 @@ def XTensions_template(aImarisId):
     for i in tqdm(range(1000000)):
         pass
 
-
     print('''
-    ####################################################################################
-    #########     Extension finished, wait for 5s to close automatically     ###########
-    ####################################################################################
+    ##################################################################
+    ###############         Extension finished.              #########
+    ###############   Wait for 5s to close automatically     #########
+    ##################################################################
     ''')
     time.sleep(5)
