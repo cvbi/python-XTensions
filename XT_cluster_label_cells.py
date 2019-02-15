@@ -5,7 +5,7 @@
 #    <CustomTools>
 #      <Menu name = "Python plugins">
 #       <Submenu name = "Clustering">
-#        <Item name="Label Cells based on density clusters" icon="Python" tooltip="Use clustered model to label new cells.">
+#        <Item name="Label Cells using density model" icon="Python" tooltip="Use clustered model to label new cells.">
 #         <Command>PythonXT::XT_cluster_label_cells(%i)</Command>
 #        </Item>
 #       </Submenu>
@@ -64,10 +64,10 @@ def XT_cluster_label_cells(aImarisId):
     vDataSet = vImaris.GetDataSet()
 
     imaris_file = vImaris.GetCurrentFileName()
-    imaris_dir = os.path.dirname(imaris_file)
+    imaris_dir  = os.path.dirname(imaris_file)
     imaris_name = os.path.basename(imaris_file)
-    input_model = get_input_file(window_title='Select model file to load.', initial_dir=imaris_dir, w=300, h=200)
-    output_dir = get_output_dir(window_title='Select folder to save output file.', initial_dir=imaris_dir, w=300, h=200)
+    input_model = get_input_file(window_title='Select model file to load :', initial_dir=imaris_dir, w=500, h=200)
+    output_dir  = get_output_dir(window_title='Select folder to save output file :', initial_dir=imaris_dir, w=500, h=200)
 
     # Load model
 
@@ -88,7 +88,7 @@ def XT_cluster_label_cells(aImarisId):
     objects = GetSurpassObjects(vImaris=vImaris, search=object_type)
     objects_list = objects.keys()
     object_name = create_window_from_list(object_list=objects_list,
-                                          w=300, h=len(objects_list)*40,
+                                          w=500, h=len(objects_list)*50,
                                           window_title='Select one object')
     print('\nObject Selected : ' + object_name)
     time.sleep(2)
