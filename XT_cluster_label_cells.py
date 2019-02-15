@@ -60,8 +60,8 @@ def XT_cluster_label_cells(aImarisId):
     time.sleep(2)
 
     vImarisLib = ImarisLib.ImarisLib()
-    vImaris = vImarisLib.GetApplication(aImarisId)
-    vDataSet = vImaris.GetDataSet()
+    vImaris    = vImarisLib.GetApplication(aImarisId)
+    vDataSet   = vImaris.GetDataSet()
 
     imaris_file = vImaris.GetCurrentFileName()
     imaris_dir  = os.path.dirname(imaris_file)
@@ -72,14 +72,15 @@ def XT_cluster_label_cells(aImarisId):
     # Load model
 
     clusterer = joblib.load(filename=input_model)
+    print('Model successfully loaded.')
     time.sleep(2)
 
     # Select Object Type
 
     object_type_list = ["surfaces", "cells", "spots"]
-    object_type = create_window_from_list(object_list=object_type_list,
-                                          w=300, h=len(object_type_list)*40,
-                                          window_title='Select one object')
+    object_type = create_window_from_list(object_list = object_type_list,
+                                          w = 300, h = 50*len(object_type_list),
+                                          window_title = 'Select one object')
     print('\nObject type Selected : ' + object_type)
     time.sleep(1)
 
@@ -87,40 +88,42 @@ def XT_cluster_label_cells(aImarisId):
 
     objects = GetSurpassObjects(vImaris=vImaris, search=object_type)
     objects_list = objects.keys()
-    object_name = create_window_from_list(object_list=objects_list,
-                                          w=500, h=len(objects_list)*50,
-                                          window_title='Select one object')
-    print('\nObject Selected : ' + object_name)
-    time.sleep(2)
+    objects_selected = create_window_for_multiple_selection(object_list = objects_list,
+                                                            window_title = 'Select surfaces get cluster labels.',
+                                                            w = 500, h = 50*len(objects_list))
+    print('\nObjects Selected : \n')
+    print(objects_selected)
+    time.sleep(1)
 
-    # Path for output
+    for object_name in objects_selected:
 
-    output_file = imaris_name + '_' + object_name + '_transferred_labels.txt'
-    output_path_stats = output_dir + '/' + output_file
-    time.sleep(2)
+        # Path for output
+        output_file = imaris_name + '_' + object_name + '_transferred_labels.txt'
+        output_path_stats = output_dir + '/' + output_file
+        time.sleep(1)
 
-    # Get statistics for selected surface
+        # Get statistics for selected surface
 
-    print('\nAcquiring Statistics from Imaris for {object}'.format(object=object_name))
-    time.sleep(2)
-    all_stats = get_imaris_statistics(vImaris=vImaris,
-                                      object_type=object_type,
-                                      object_name=object_name)
-    print('\nStatistics for {c} Acquired.'.format(c=object_name))
-    time.sleep(2)
+        print('\nAcquiring Statistics from Imaris for {o}'.format(o=object_name))
+        time.sleep(2)
+        all_stats = get_imaris_statistics(vImaris=vImaris,
+                                          object_type=object_type,
+                                          object_name=object_name)
+        print('\nStatistics for {o} Acquired.'.format(o=object_name))
+        time.sleep(2)
 
-    # Predict for all time points
+        # Predict for all time points
 
-    data_tn = all_stats.copy()
-    data_in = data_tn.loc[:, ['Position X', 'Position Y', 'Position Z']].copy()
-    X = data_in.values
-    labels = dbscan_predict(model=clusterer, X=X)
-    all_stats.loc[:, 'cluster_label'] = labels
+        data_tn = all_stats.copy()
+        data_in = data_tn.loc[:, ['Position X', 'Position Y', 'Position Z']].copy()
+        X = data_in.values
+        labels = dbscan_predict(model=clusterer, X=X)
+        all_stats.loc[:, 'cluster_label'] = labels
 
-    print('\nLabelling complete.\n')
-    time.sleep(2)
+        print('\nLabelling complete for {o}\n'.format(o=object_name))
+        time.sleep(2)
 
-    all_stats.to_csv(path_or_buf=output_path_stats, index=False, sep='|')
+        all_stats.to_csv(path_or_buf=output_path_stats, index=False, sep='|')
 
     print('''
      ####################################################################################
