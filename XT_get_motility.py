@@ -26,8 +26,6 @@ from cvbi.stats.track import get_motility
 
 def XT_get_motility(aImarisId):
 
-    vImarisLib = ImarisLib.ImarisLib()
-    vImaris = vImarisLib.GetApplication(aImarisId)
 
     print('''
     ####################################################################################
@@ -35,6 +33,12 @@ def XT_get_motility(aImarisId):
     ####################################################################################
     ''')
     time.sleep(5)
+
+    vImarisLib = ImarisLib.ImarisLib()
+    vImaris = vImarisLib.GetApplication(aImarisId)
+    imaris_file = vImaris.GetCurrentFileName()
+    imaris_dir = os.path.dirname(imaris_file)
+    imaris_name = os.path.basename(imaris_file)
 
     object_type_list = ["spots", "surfaces", "filaments", "cells"]
     object_type = create_window_from_list(object_list=object_type_list, window_title='Select one object type')
@@ -59,8 +63,8 @@ def XT_get_motility(aImarisId):
     print('\n Calculating Motility coefficients for : '+object_name)
     time.sleep(2)
     try:
-        data_motility = data_stats.groupby('trackID').apply(lambda df: get_motility(data_cell=df, time_limit=660))
-        data_motility.reset_index(drop=True, inplace=True)
+        data_motility = data_stats.groupby('trackID').apply(lambda df: get_motility(data_cell=df, time_limit=601))
+        data_motility.reset_index(drop=False, inplace=True)
     except:
         print('\n Failure to calculate motility values \n')
         time.sleep(5)
@@ -70,9 +74,6 @@ def XT_get_motility(aImarisId):
     time.sleep(2)
 
     try:
-        imaris_file = vImaris.GetCurrentFileName()
-        imaris_dir = os.path.dirname(imaris_file)
-        imaris_name = os.path.basename(imaris_file)
 
         data_motility['File'] = imaris_name
         data_motility_subset = data_motility.copy()
@@ -86,6 +87,7 @@ def XT_get_motility(aImarisId):
         output_path = output_dir+'/'+output_file
         output_path_subset = output_dir+'/'+output_file_subset
 
+        data_motility = data_motility.drop(['level_1'], axis=1)
         data_motility.to_csv(output_path, index=False, sep='|')
         data_motility_subset.to_csv(output_path_subset, index=False, sep='|')
     except:
