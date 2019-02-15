@@ -73,8 +73,7 @@ def XT_cluster_cells(aImarisId):
 
     object_type_list = ["surfaces", "cells", "spots"]
     object_type = create_window_from_list(object_list=object_type_list,
-                                          w=300,
-                                          h=len(object_type_list)*40,
+                                          w=500, h=len(object_type_list)*50,
                                           window_title='Select one object')
     print('\nObject type Selected : ' + object_type)
     time.sleep(1)
@@ -84,8 +83,7 @@ def XT_cluster_cells(aImarisId):
     objects = GetSurpassObjects(vImaris=vImaris, search=object_type)
     objects_list = objects.keys()
     object_name = create_window_from_list(object_list=objects_list,
-                                          w=300,
-                                          h=len(objects_list)*40,
+                                          w=500, h=len(objects_list)*50,
                                           window_title='Select one object')
     print('\nObject Selected : ' + object_name)
     time.sleep(1)
@@ -166,7 +164,9 @@ def XT_cluster_cells(aImarisId):
     imaris_file = vImaris.GetCurrentFileName()
     imaris_dir = os.path.dirname(imaris_file)
     imaris_name = os.path.basename(imaris_file)
-    output_dir = get_output_dir(initial_dir=imaris_dir, w=300, h=200)
+    output_dir = get_output_dir(window_title = 'Select directory to save output',
+                                initial_dir=imaris_dir,
+                                w=500, h=300)
 
     print('\nSelected Directory path : {dir}'.format(dir=output_dir))
     time.sleep(2)
@@ -177,7 +177,7 @@ def XT_cluster_cells(aImarisId):
     time.sleep(2)
 
     output_file = create_window_for_input(default=output_file,
-                                          w=300, h=100,
+                                          w=700, h=300,
                                           window_text='Modify the file name for any changes',
                                           window_title='Provide your output file name')
 
