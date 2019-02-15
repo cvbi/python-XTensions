@@ -53,9 +53,8 @@ def XT_cluster_and_label_voxels(aImarisId):
     # Select Channel
 
     channel_list = range(1, nC+1)
-    channel_selected = create_window_from_list(channel_list,
-                                               w=300,
-                                               h=len(channel_list)*50,
+    channel_selected = create_window_from_list(object_list = channel_list,
+                                               w=500, h=nC*50,
                                                window_title='Select Channel')
     ch_in = np.int64(channel_selected)
 
@@ -71,9 +70,8 @@ def XT_cluster_and_label_voxels(aImarisId):
 
     n_clusters = 2
     n_clusters = create_window_for_input(default=n_clusters,
-                                         w=300,
-                                         h=500,
-                                         window_title='Clusters',
+                                         w=600, h=500,
+                                         window_title='Number of intensity clusters :',
                                          window_text='Provide number of clusters to segment into',
                                          valid_range=[2, 25])
     n_clusters = np.int64(n_clusters)
@@ -84,9 +82,8 @@ def XT_cluster_and_label_voxels(aImarisId):
     t_cluster = 1
     if nT > 1:
         t_cluster = create_window_for_input(default=t_cluster,
-                                            w=400,
-                                            h=500,
-                                            window_title='Time',
+                                            w=600, h=500,
+                                            window_title='Provide time index to cluster :',
                                             window_text='Provide an integer time point for determining voxel clusters.'
                                                     'For others, this intensity distribution is used as reference.',
                                             valid_range=[1, nT])
@@ -107,7 +104,6 @@ def XT_cluster_and_label_voxels(aImarisId):
         vDataSet.SetSizeC(ch_out)
         vDataSet.SetChannelName(ch_out-1, ch_out_name)
         vDataSet.SetChannelDescription(ch_out-1, ch_out_description)
-        #vDataSet.SetChannelColorTable(aIndexC=ch_out-1, aColorRGB=channel_color, aAlpha=channel_alpha)
 
         print('Channel :'+str(ch_out)+' added to contain cluster label :'+str(cluster_channel) + '\n')
         time.sleep(2)

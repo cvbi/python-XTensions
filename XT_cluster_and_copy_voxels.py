@@ -67,7 +67,7 @@ def XT_cluster_and_copy_voxels(aImarisId):
     time.sleep(2)
 
     # Select Number of clusters
-
+    n_clusters = 2
     n_clusters = create_window_for_input(default=n_clusters,
                                          w=300, h=500,
                                          window_title='Clusters',
