@@ -41,6 +41,7 @@
 # the file COPYING, distributed as part of that software.
 #
 
+
 """
 ===========
 XTIPy magic
@@ -69,14 +70,14 @@ import ImarisLib
 import BridgeLib
 import tempfile
 
-from notebook.notebookapp import main
-from IPython import get_ipython
-from IPython.core.magic import (Magics, magics_class, line_magic, cell_magic, line_cell_magic)
+
+from IPython.core.magic import (Magics, magics_class, line_magic)
 from IPython.testing.skipdoctest import skip_doctest
 from IPython.utils.py3compat import unicode_to_str
-from IPython.display import Image
-import webbrowser
 
+print('Starting Jupyter Notebook in browser :')
+print('\n'*10)
+time.sleep(5)
 
 class ImarisMagicError(Exception):
     pass
