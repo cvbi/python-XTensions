@@ -16,20 +16,21 @@
 import os
 import time
 import ImarisLib
+import pandas as pd
 
 from cvbi.base_imaris.objects import GetSurpassObjects
 from cvbi.gui import *
+from cvbi.stats.track import get_track_angles
 from cvbi.base_imaris.stats import get_imaris_statistics
-
 
 # Get All Statistics
 
 def XT_GetStats(aImarisId):
 
     print('''
-    ####################################################################################
-    ###########################     Extension started     ##############################
-    ####################################################################################
+    ####################################################
+    ##########     Extension started     ###############
+    ####################################################
     ''')
     time.sleep(5)
 
@@ -39,7 +40,7 @@ def XT_GetStats(aImarisId):
     imaris_dir = os.path.dirname(imaris_file)
     imaris_name = os.path.basename(imaris_file)
 
-    object_type_list = ["spots", "surfaces", "filaments", "cells"]
+    object_type_list = ["surfaces", "spots", "cells"]
     object_type = create_window_from_list(object_list=object_type_list,
                                           window_title='Select one object type',
                                           w=500, h=500)
@@ -58,14 +59,26 @@ def XT_GetStats(aImarisId):
     output_dir = get_output_dir(initial_dir = imaris_dir)
 
     for object_name in objects_selected:
-        all_stats = get_imaris_statistics(vImaris=vImaris, object_type=object_type, object_name=object_name)
+
+        # Get Imaris Statistics
+
+        data_stats = get_imaris_statistics(vImaris=vImaris, object_type=object_type, object_name=object_name)
+
+        # Get Instantaneous track angles
+
+        data_angles = data_stats.groupby( 'trackID' ).apply( lambda df_in : get_track_angles( df_in , return_ids = True ) )
+        data_angles.reset_index( inplace = True )
+        data_stats_out = pd.merge( left = data_stats , right = data_angles , on = ['trackID' , 'objectID'] )
+        data_stats_out.sort_values(by=['trackID','time'], inplace = True)
+
         output_file = imaris_name+'_'+object_name+'_statistics.txt'
         output_path = output_dir+'/'+output_file
-        all_stats.to_csv(output_path, index=False, sep='|')
+        data_stats_out.to_csv(output_path, index=False, sep='|')
 
     print('''
-    ####################################################################################
-    #########     Extension finished, wait for 5s to close automatically     ###########
-    ####################################################################################
+    ###########################################################
+    #########            Extension finished.        ###########
+    #########  Wait for 5s to close automatically   ###########
+    ###########################################################
     ''')
     time.sleep(5)
