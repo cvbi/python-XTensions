@@ -37,13 +37,13 @@ def XT_run_comparative_movement_analysis(aImarisId):
     imaris_name = os.path.basename(imaris_file)
 
     print('''
-    ####################################################################################
-    ###########################     Extension started     ##############################
-    ####################################################################################
+    ####################################################
+    ##########     Extension started     ###############
+    ####################################################
     ''')
     time.sleep(5)
 
-    object_type_list = ["spots", "surfaces", "filaments", "cells"]
+    object_type_list = ["surfaces", "spots", "cells"]
     object_type = create_window_from_list(object_list=object_type_list,
                                           window_title='Select one object type',
                                           w = 500, h = 50*len(object_type_list))
@@ -66,7 +66,13 @@ def XT_run_comparative_movement_analysis(aImarisId):
     print(objects_moving)
     time.sleep(2)
 
-    output_dir = get_output_dir(window_title = 'Select folder to save output :',
+    input_dir = get_output_dir(window_title = 'Select input folder :',
+                                initial_dir=imaris_dir,
+                                w = 500, h = 400)
+    print('\nInput directory selected : '+input_dir)
+    time.sleep(2)
+
+    output_dir = get_output_dir(window_title = 'Select output folder :',
                                 initial_dir=imaris_dir,
                                 w = 500, h = 400)
     print('\nOutput directory selected : '+output_dir)
@@ -81,14 +87,14 @@ def XT_run_comparative_movement_analysis(aImarisId):
 
         print('Reading data for {f}'.format(f = cell_moving))
 
-        path_data_moving = output_dir+'/'+imaris_name + '_' + cell_moving + '_transferred_labels.txt'
-        path_data_motility = output_dir+'/'+imaris_name + '_' + cell_moving + '_motility_subset.txt'
+        path_data_moving   = input_dir+'/'+imaris_name + '_' + cell_moving + '_transferred_labels.txt'
+        path_data_motility = input_dir+'/'+imaris_name + '_' + cell_moving + '_motility_subset.txt'
 
         time.sleep(2)
 
         if os.path.exists(path_data_moving):
             data_moving = pd.read_csv(path_data_moving, sep = '|')
-            print('Data for labels read correctly.')
+            print('Data for labels read successfully.')
             time.sleep(2)
         else:
             print('''
@@ -102,7 +108,7 @@ def XT_run_comparative_movement_analysis(aImarisId):
 
         if os.path.exists(path_data_motility):
             data_motility = pd.read_csv(path_data_motility, sep = '|')
-            print('Data for motility read correctly.')
+            print('Data for motility read successfully.')
             time.sleep(2)
         else:
             print('''
@@ -123,7 +129,7 @@ def XT_run_comparative_movement_analysis(aImarisId):
             time.sleep(2)
 
             data_moving_subset = data_moving.loc[data_moving.Time.lt(t_limit * 60).values, :].copy()
-            print('Subseting finished.')
+            print('Subsetting finished.')
             time.sleep(2)
 
             # Calculate All metrics
@@ -166,8 +172,9 @@ def XT_run_comparative_movement_analysis(aImarisId):
 
 
     print('''
-    ####################################################################################
-    #########     Extension finished, wait for 5s to close automatically     ###########
-    ####################################################################################
+    ###########################################################
+    #########            Extension finished.        ###########
+    #########  Wait for 5s to close automatically   ###########
+    ###########################################################
     ''')
     time.sleep(5)
