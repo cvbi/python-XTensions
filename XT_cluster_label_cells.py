@@ -17,11 +17,13 @@ import time
 import ImarisLib
 import os
 
+from cvbi.gui import *
+from cvbi.stats.track import get_track_angles
 from cvbi.base_imaris.objects import GetSurpassObjects
 from cvbi.base_imaris.stats import get_imaris_statistics
-from cvbi.gui import *
 
 import numpy as np
+import pandas as pd
 from sklearn.externals import joblib
 from sklearn.cluster import DBSCAN
 
@@ -53,9 +55,9 @@ def dbscan_predict(model, X):
 def XT_cluster_label_cells(aImarisId):
 
     print('''
-     ####################################################################################
-     ###########################     Extension started     ##############################
-     ####################################################################################
+    ####################################################
+    ##########     Extension started     ###############
+    ####################################################
      ''')
     time.sleep(2)
 
@@ -66,8 +68,9 @@ def XT_cluster_label_cells(aImarisId):
     imaris_file = vImaris.GetCurrentFileName()
     imaris_dir  = os.path.dirname(imaris_file)
     imaris_name = os.path.basename(imaris_file)
-    input_model = get_input_file(window_title='Select model file to load :', initial_dir=imaris_dir, w=500, h=200)
-    output_dir  = get_output_dir(window_title='Select folder to save output file :', initial_dir=imaris_dir, w=500, h=200)
+    input_dir   = get_output_dir(window_title='Select input folder :', initial_dir=imaris_dir, w=500, h=200)
+    output_dir  = get_output_dir(window_title='Select output folder :', initial_dir=imaris_dir, w=500, h=200)
+    input_model = get_input_file(window_title='Select model file to load :', initial_dir=input_dir, w=500, h=200)
 
     # Load model
 
@@ -80,7 +83,7 @@ def XT_cluster_label_cells(aImarisId):
     object_type_list = ["surfaces", "cells", "spots"]
     object_type = create_window_from_list(object_list = object_type_list,
                                           w = 300, h = 50*len(object_type_list),
-                                          window_title = 'Select one object')
+                                          window_title = 'Select one object type')
     print('\nObject type Selected : ' + object_type)
     time.sleep(1)
 
@@ -89,7 +92,7 @@ def XT_cluster_label_cells(aImarisId):
     objects = GetSurpassObjects(vImaris=vImaris, search=object_type)
     objects_list = objects.keys()
     objects_selected = create_window_for_multiple_selection(object_list = objects_list,
-                                                            window_title = 'Select surfaces get cluster labels.',
+                                                            window_title = 'Select surfaces to assign cluster labels.',
                                                             w = 500, h = 50*len(objects_list))
     print('\nObjects Selected : \n')
     print(objects_selected)
@@ -106,11 +109,19 @@ def XT_cluster_label_cells(aImarisId):
 
         print('\nAcquiring Statistics from Imaris for {o}'.format(o=object_name))
         time.sleep(2)
-        all_stats = get_imaris_statistics(vImaris=vImaris,
+        data_stats = get_imaris_statistics(vImaris=vImaris,
                                           object_type=object_type,
                                           object_name=object_name)
         print('\nStatistics for {o} Acquired.'.format(o=object_name))
         time.sleep(2)
+
+        # Get Instantaneous track angles
+
+        data_angles = data_stats.groupby( 'trackID' ).apply( lambda df_in : get_track_angles( df_in , return_ids = True ) )
+        data_angles.reset_index( inplace = True )
+        data_stats_out = pd.merge( left = data_stats , right = data_angles , on = ['trackID' , 'objectID'] )
+        data_stats_out.sort_values(by=['trackID', 'time'], inplace = True)
+        all_stats = data_stats_out.copy()
 
         # Predict for all time points
 
@@ -126,8 +137,9 @@ def XT_cluster_label_cells(aImarisId):
         all_stats.to_csv(path_or_buf=output_path_stats, index=False, sep='|')
 
     print('''
-     ####################################################################################
-     #########     Extension finished, wait for 5s to close automatically     ###########
-     ####################################################################################
+    ###########################################################
+    #########            Extension finished.        ###########
+    #########  Wait for 5s to close automatically   ###########
+    ###########################################################
      ''')
     time.sleep(5)
