@@ -43,7 +43,7 @@ def XT_get_motility(aImarisId):
     imaris_name = os.path.basename(imaris_file)
 
     print('Choose object type to get statistics')
-    object_type_list = ["spots", "surfaces", "cells"]
+    object_type_list = ["surfaces", "spots", "cells"]
     object_type = create_window_from_list(object_list=object_type_list,
                                           window_title='Select one object type',
                                           w=500, h=50*len(object_type_list))

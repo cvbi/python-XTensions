@@ -17,11 +17,13 @@ import time
 import ImarisLib
 import os
 
+from cvbi.stats.track import get_track_angles
 from cvbi.base_imaris.objects import GetSurpassObjects
 from cvbi.base_imaris.stats import get_imaris_statistics
 from cvbi.gui import *
 
 import numpy as np
+import pandas as pd
 from sklearn.externals import joblib
 from sklearn.cluster import DBSCAN
 
@@ -57,9 +59,9 @@ def XT_cluster_cells(aImarisId):
     vDataSet = vImaris.GetDataSet()
 
     print('''
-     ####################################################################################
-     ###########################     Extension started     ##############################
-     ####################################################################################
+    ####################################################
+    ##########     Extension started     ###############
+    ####################################################
      ''')
     time.sleep(2)
 
@@ -92,9 +94,18 @@ def XT_cluster_cells(aImarisId):
 
     print('\nAcquiring Statistics from Imaris for {object}'.format(object=object_name))
     time.sleep(2)
-    all_stats = get_imaris_statistics(vImaris=vImaris,
+    data_stats = get_imaris_statistics(vImaris=vImaris,
                                       object_type=object_type,
                                       object_name=object_name)
+
+    # Get Instantaneous track angles
+
+    data_angles = data_stats.groupby( 'trackID' ).apply( lambda df_in : get_track_angles( df_in , return_ids = True ) )
+    data_angles.reset_index( inplace = True )
+    data_stats_out = pd.merge( left = data_stats , right = data_angles , on = ['trackID' , 'objectID'] )
+    data_stats_out.sort_values( by = ['trackID' , 'time'] , inplace = True )
+    all_stats = data_stats_out.copy()
+
     print('\nStatistics Acquired.')
     time.sleep(2)
 
@@ -195,8 +206,9 @@ def XT_cluster_cells(aImarisId):
         time.sleep(3)
 
     print('''
-     ####################################################################################
-     #########     Extension finished, wait for 5s to close automatically     ###########
-     ####################################################################################
+    ###########################################################
+    #########            Extension finished.        ###########
+    #########  Wait for 5s to close automatically   ###########
+    ###########################################################
      ''')
     time.sleep(5)
