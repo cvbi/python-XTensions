@@ -69,7 +69,7 @@ def XT_cluster_plot_cells(aImarisId) :
     print('Object Selected : ' + object_selected)
     time.sleep( 1 )
 
-    output_dir = get_output_dir( window_title = 'Select output directory.' , initial_dir = imaris_dir )
+    output_dir = get_dir( window_title = 'Select output directory.' , initial_dir = imaris_dir )
 
     print('\nGetting statistics from Imaris for {o}\n'.format( o = object_selected ))
     time.sleep( 1 )

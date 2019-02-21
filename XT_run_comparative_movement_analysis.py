@@ -66,15 +66,15 @@ def XT_run_comparative_movement_analysis(aImarisId):
     print(objects_moving)
     time.sleep(2)
 
-    input_dir = get_output_dir(window_title = 'Select input folder :',
-                                initial_dir=imaris_dir,
-                                w = 500, h = 400)
+    input_dir = get_dir( window_title = 'Select input folder :' ,
+                         initial_dir=imaris_dir ,
+                         w = 500 , h = 400 )
     print('\nInput directory selected : '+input_dir)
     time.sleep(2)
 
-    output_dir = get_output_dir(window_title = 'Select output folder :',
-                                initial_dir=imaris_dir,
-                                w = 500, h = 400)
+    output_dir = get_dir( window_title = 'Select output folder :' ,
+                          initial_dir=imaris_dir ,
+                          w = 500 , h = 400 )
     print('\nOutput directory selected : '+output_dir)
     time.sleep(2)
 
