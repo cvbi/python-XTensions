@@ -80,7 +80,7 @@ def XT_cluster_label_voxels(aImarisId):
     # Load model into memory
 
     print('Select model object ( it ends in .joblib ): ')
-    model_file = get_input_file(window_title = 'Select the model file that belongs to this dataset :', initial_dir = imaris_dir, w = 500, h=400)
+    model_file = get_file( window_title = 'Select the model file that belongs to this dataset :' , initial_dir = imaris_dir , w = 500 , h=400 )
     clusterer = joblib.load(model_file)
     print(clusterer)
     print('\nModel object loaded into memory.\n')

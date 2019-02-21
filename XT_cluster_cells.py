@@ -175,9 +175,9 @@ def XT_cluster_cells(aImarisId):
     imaris_file = vImaris.GetCurrentFileName()
     imaris_dir = os.path.dirname(imaris_file)
     imaris_name = os.path.basename(imaris_file)
-    output_dir = get_output_dir(window_title = 'Select directory to save output',
-                                initial_dir=imaris_dir,
-                                w=500, h=300)
+    output_dir = get_dir( window_title = 'Select directory to save output' ,
+                          initial_dir=imaris_dir ,
+                          w=500 , h=300 )
 
     print('\nSelected Directory path : {dir}'.format(dir=output_dir))
     time.sleep(2)

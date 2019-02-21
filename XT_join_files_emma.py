@@ -53,9 +53,12 @@ def XT_join_files_emma(aImarisId):
     print('\nSelect first file to combine : Protrusions file \n')
     time.sleep(2)
 
-    file_01 = get_input_file(window_title='Select File 01 to read :',
-                             initial_dir = imaris_dir,
-                             w = 600, h=400)
+    file_01 = get_file( window_title= 'Select File 01 to read :' ,
+                        initial_dir = imaris_dir ,
+                        filetypes = (("txt files","*.txt"),
+                                     ("csv files","*.csv"),
+                                     ("all files","*.*")),
+                        w = 600 , h=400 )
     time.sleep(2)
     sep_01 = ','
 
@@ -64,9 +67,12 @@ def XT_join_files_emma(aImarisId):
     print('\nSelect second file to combine : Tracks file \n')
     time.sleep(2)
 
-    file_02 = get_input_file(window_title='Select File 02 to read :',
-                             initial_dir = imaris_dir,
-                             w = 600, h=400)
+    file_02 = get_file( window_title= 'Select File 02 to read :' ,
+                        initial_dir = imaris_dir ,
+                        filetypes = (("txt files","*.txt"),
+                                     ("csv files","*.csv"),
+                                     ("all files","*.*")),
+                        w = 600 , h=400 )
     time.sleep(2)
     sep_02 = ','
 
@@ -81,7 +87,7 @@ def XT_join_files_emma(aImarisId):
                         suffixes = ('_first', '_second'))
     data_out.sort_values(by=['trackid', 'frame'], inplace = True)
 
-    output_dir = get_output_dir( window_title = 'Select folder to save output' , initial_dir = imaris_dir )
+    output_dir = get_dir( window_title = 'Select folder to save output' , initial_dir = imaris_dir )
     output_file = 'combined'
     output_file = create_window_for_input( default = output_file ,
                                            w = 700 , h = 200 ,

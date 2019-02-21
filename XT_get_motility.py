@@ -60,7 +60,7 @@ def XT_get_motility(aImarisId):
     print('\n Object type Selected : '+object_type)
 
     print('\nChoose output folder to save results\n')
-    output_dir = get_output_dir(initial_dir=imaris_dir)
+    output_dir = get_dir( initial_dir=imaris_dir )
 
     for object_name in objects_selected:
         print('\nObject Selected : '+object_name)

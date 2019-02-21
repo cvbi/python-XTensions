@@ -68,18 +68,26 @@ def XT_cluster_label_cells(aImarisId):
     imaris_file = vImaris.GetCurrentFileName()
     imaris_dir  = os.path.dirname(imaris_file)
     imaris_name = os.path.basename(imaris_file)
-    input_dir   = get_output_dir(window_title='Select input folder :', initial_dir=imaris_dir, w=500, h=200)
-    output_dir  = get_output_dir(window_title='Select output folder :', initial_dir=imaris_dir, w=500, h=200)
-    input_model = get_input_file(window_title='Select model file to load :', initial_dir=input_dir, w=500, h=200)
+    input_dir   = get_dir( window_title= 'Select input folder :' , initial_dir=imaris_dir , w=500 , h=200 )
+    output_dir  = get_dir( window_title= 'Select output folder :' , initial_dir=imaris_dir , w=500 , h=200 )
+    input_model = get_file( window_title= 'Select model file to load :' , initial_dir=input_dir , w=500 , h=200,
+                            filetypes = (("model files","*.joblib"),
+                                         ("all files","*.*")))
+    
+    print('\nInput Folder  : {f}'.format(f=input_dir))
+    print('\nOutput Folder : {f}'.format(f=output_dir))
+    print('\nModel : {f}'.format(f=input_model))
+    time.sleep(3)
 
     # Load model
-
+    print('Loading Model')
+    time.sleep(2)
     clusterer = joblib.load(filename=input_model)
     print('Model successfully loaded.')
     time.sleep(2)
 
     # Select Object Type
-
+    print('Select a object type : ')
     object_type_list = ["surfaces", "cells", "spots"]
     object_type = create_window_from_list(object_list = object_type_list,
                                           w = 300, h = 50*len(object_type_list),

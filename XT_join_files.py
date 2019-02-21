@@ -41,17 +41,23 @@ def XT_join_files(aImarisId):
 
 
     print('\nSelect first file to combine\n')
-    file_01 = get_input_file(window_title='Select File to read : ',
-                             initial_dir = imaris_dir,
-                             w = 600, h=400)
+    file_01 = get_file( window_title= 'Select File to read : ' ,
+                        initial_dir = imaris_dir ,
+                        filetypes = (("txt files","*.txt"),
+                                     ("csv files","*.csv"),
+                                     ("all files","*.*")),
+                        w = 600 , h=400)
     sep_01 = '|'
 
     data_left = pd.read_csv(file_01, sep =sep_01)
 
     print('\nSelect second file to combine\n')
-    file_02 = get_input_file(window_title='Select File to read : ',
-                             initial_dir = imaris_dir,
-                             w = 600, h=400)
+    file_02 = get_file( window_title= 'Select File to read : ' ,
+                        initial_dir = imaris_dir ,
+                        filetypes = (("txt files","*.txt"),
+                                     ("csv files","*.csv"),
+                                     ("all files","*.*")),
+                        w = 600 , h=400 )
     sep_02 = '|'
 
     data_right = pd.read_csv(file_02, sep =sep_02)
@@ -78,7 +84,7 @@ def XT_join_files(aImarisId):
 
     try:
 
-        output_dir = get_output_dir(window_title = 'Select folder to save output', initial_dir=imaris_dir)
+        output_dir = get_dir( window_title = 'Select folder to save output' , initial_dir=imaris_dir )
         output_file = imaris_name+'_combined.txt'
         output_file = create_window_for_input(default=output_file,
                                               w=700, h=200,

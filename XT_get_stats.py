@@ -18,9 +18,9 @@ import time
 import ImarisLib
 import pandas as pd
 
-from cvbi.base_imaris.objects import GetSurpassObjects
 from cvbi.gui import *
 from cvbi.stats.track import get_track_angles
+from cvbi.base_imaris.objects import GetSurpassObjects
 from cvbi.base_imaris.stats import get_imaris_statistics
 
 # Get All Statistics
@@ -56,7 +56,7 @@ def XT_GetStats(aImarisId):
     print(objects_selected)
     time.sleep(3)
 
-    output_dir = get_output_dir(initial_dir = imaris_dir)
+    output_dir = get_dir( initial_dir = imaris_dir )
 
     for object_name in objects_selected:
 
