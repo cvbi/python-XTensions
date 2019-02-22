@@ -1,11 +1,11 @@
-# Template Extension
+# Imaris Extension
 #
 #  Copyright (C) 2018 Nilesh patil <nilesh.patil@rochester.edu>, MIT license
 #
 #    <CustomTools>
 #      <Menu name = "Python plugins">
 #       <Submenu name = "Submenu">
-#        <Item name="Name in menu" icon="Python" tooltip="Description to be shown in tooltip">
+#        <Item name="Name of XTension" icon="Python" tooltip="Description to be shown in tooltip">
 #         <Command>PythonXT::XTensions_template(%i)</Command>
 #        </Item>
 #       </Submenu>
@@ -34,6 +34,11 @@ def XTensions_template(aImarisId):
     imaris_file = vImaris.GetCurrentFileName()
     imaris_dir  = os.path.dirname(imaris_file)
     imaris_name = os.path.basename(imaris_file)
+
+    input_dir  = get_dir(window_title = 'Select Input Folder :', initial_dir = imaris_dir, w = 400, h = 300)
+    output_dir = get_dir(window_title = 'Select Output Folder :', initial_dir = imaris_dir, w = 400, h = 300)
+
+
 
     print('''
     #####################################################

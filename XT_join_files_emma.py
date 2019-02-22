@@ -1,10 +1,10 @@
-# Clustering Voxels Extension
+# Imaris XTension
 #
 #  Copyright (C) 2018 Nilesh patil <nilesh.patil@rochester.edu>, MIT license
 #
 #    <CustomTools>
 #      <Menu name = "Python plugins">
-#          <Submenu name = "Data Manipulation">
+#          <Submenu name = "Data processing">
 #               <Item name="Combine 2 datasets - Emma" icon="Python" tooltip="Combine two datasets to create a single output">
 #                 <Command>PythonXT::XT_join_files_emma(%i)</Command>
 #               </Item>

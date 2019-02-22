@@ -1,4 +1,4 @@
-# Clustering Voxels Extension
+# Imaris XTension
 #
 #  Copyright (C) 2018 Nilesh patil <nilesh.patil@rochester.edu>, MIT license
 #
