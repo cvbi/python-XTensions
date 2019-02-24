@@ -20,6 +20,7 @@ import os
 from cvbi.gui import *
 from cvbi.stats.movement import *
 from cvbi.base_imaris.objects import GetSurpassObjects
+from cvbi.base_imaris.stats import get_statistics_track
 
 import pandas as pd
 
@@ -154,10 +155,20 @@ def XT_run_comparative_movement_analysis(aImarisId):
             except:
                 data_out_row = pd.DataFrame(data_out_dict).T
 
+            stats_track = get_statistics_track( vImaris = vImaris , object_type=object_type , object_name = cell_moving )
+            stats_track = stats_track.loc[:,['trackID','Track Speed Mean']].copy()
+            stats_track.loc[:,'Track Speed Mean'] = stats_track.loc[:,'Track Speed Mean'].values.round(4)*60
+
+            data_out_track = pd.merge(left  = data_out_track,
+                                      right = stats_track,
+                                      how = 'left',
+                                      on = 'trackID')
+
             data_out_cell.to_excel(path_out_cell, index = False)
             data_out_track.to_excel(path_out_track, index = False)
 
             # Combine with motility
+
             path_out = output_dir+'/' + cell_moving + '_motility_subset_cluster_information_' + str(t_limit) + '_Mins.xlsx'
             selected_columns = ['trackID', 'track_always_in', 'track_always_out', 'start', 'end']
             data_out = pd.merge(left = data_motility,
