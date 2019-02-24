@@ -21,7 +21,7 @@ import pandas as pd
 from cvbi.gui import *
 from cvbi.stats.track import get_track_angles
 from cvbi.base_imaris.objects import GetSurpassObjects
-from cvbi.base_imaris.stats import get_imaris_statistics
+from cvbi.base_imaris.stats import get_statistics_cell, get_statistics_track
 
 # Get All Statistics
 
@@ -62,16 +62,26 @@ def XT_GetStats(aImarisId):
 
         # Get Imaris Statistics
 
-        data_stats = get_imaris_statistics(vImaris=vImaris, object_type=object_type, object_name=object_name)
+        data_cell_stats  = get_statistics_cell( vImaris=vImaris , object_type=object_type , object_name=object_name )
+        data_track_stats = get_statistics_track( vImaris=vImaris , object_type=object_type , object_name=object_name )
 
-        # Get Instantaneous track angles
+        # Get object level stats
 
+        data_stats  = data_cell_stats.copy()
         data_angles = data_stats.groupby( 'trackID' ).apply( lambda df_in : get_track_angles( df_in , return_ids = True ) )
         data_angles.reset_index( inplace = True )
         data_stats_out = pd.merge( left = data_stats , right = data_angles , on = ['trackID' , 'objectID'] )
         data_stats_out.sort_values(by=['trackID','time'], inplace = True)
 
         output_file = imaris_name+'_'+object_name+'_statistics.txt'
+        output_path = output_dir+'/'+output_file
+        data_stats_out.to_csv(output_path, index=False, sep='|')
+
+        # Get track level stats
+
+        data_stats_out = data_track_stats.copy()
+
+        output_file = imaris_name+'_'+object_name+'_track_statistics.txt'
         output_path = output_dir+'/'+output_file
         data_stats_out.to_csv(output_path, index=False, sep='|')
 
