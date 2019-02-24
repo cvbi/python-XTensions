@@ -74,7 +74,7 @@ def XT_cluster_plot_cells(aImarisId) :
     print('\nGetting statistics from Imaris for {o}\n'.format( o = object_selected ))
     time.sleep( 1 )
 
-    data = get_imaris_statistics( vImaris = vImaris , object_type = object_type , object_name = object_selected )
+    data = get_statistics_cell( vImaris = vImaris , object_type = object_type , object_name = object_selected )
     columns_use = ['trackID' , 'Time Index' , 'Position X' , 'Position Y' , 'Position Z']
     data_tn = data.loc[: , columns_use]
     data_tn.columns = ['trackID' , 'time' , 'x' , 'y' , 'z']
