@@ -19,7 +19,7 @@ import ImarisLib
 
 from cvbi.gui import *
 from cvbi.base_imaris.objects import GetSurpassObjects
-from cvbi.base_imaris.stats import get_imaris_statistics
+from cvbi.base_imaris.stats import get_statistics_cell
 from cvbi.stats.track import get_motility
 
 import pandas as pd
@@ -70,7 +70,7 @@ def XT_get_motility(aImarisId):
 
         print('\nGetting Cell movement data for : '+object_name)
         time.sleep(2)
-        data_stats = get_imaris_statistics(vImaris=vImaris, object_type=object_type, object_name=object_name)
+        data_stats = get_statistics_cell( vImaris=vImaris , object_type=object_type , object_name=object_name )
 
         # Run calculations
 

@@ -20,7 +20,7 @@ import os
 from cvbi.gui import *
 from cvbi.stats.track import get_track_angles
 from cvbi.base_imaris.objects import GetSurpassObjects
-from cvbi.base_imaris.stats import get_imaris_statistics
+from cvbi.base_imaris.stats import get_statistics_cell
 
 import numpy as np
 import pandas as pd
@@ -117,9 +117,9 @@ def XT_cluster_label_cells(aImarisId):
 
         print('\nAcquiring Statistics from Imaris for {o}'.format(o=object_name))
         time.sleep(2)
-        data_stats = get_imaris_statistics(vImaris=vImaris,
-                                          object_type=object_type,
-                                          object_name=object_name)
+        data_stats = get_statistics_cell( vImaris=vImaris ,
+                                          object_type=object_type ,
+                                          object_name=object_name )
         print('\nStatistics for {o} Acquired.'.format(o=object_name))
         time.sleep(2)
 
