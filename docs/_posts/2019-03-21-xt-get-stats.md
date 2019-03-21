@@ -15,30 +15,34 @@ categories: XTensions
 
 ---
 
+### Description
+
 This XTension gets statistics from Imaris and saves them to a single csv file. 
 
 ---
 
+### Usage
 
 Trial
 
 ---
 
+### Code
 
-{% highlight python %}
+```
 
 # Imaris XTension
 #
 #  Copyright (C) 2018 Nilesh patil <nilesh.patil@rochester.edu>, MIT license
 #
 #    <CustomTools>
-#      <Menu name = "Python plugins">
-#          <Submenu name = "Metrics">
-#               <Item name="Get All Imaris Statistics" icon="Python" tooltip="Get all Statistics from Imaris for a selectd surface">
-#               <Command>PythonXT::XT_GetStats(%i)</Command>
-#               </Item>
-#           </Submenu>
-#      </Menu>
+#     <Menu name = "Python plugins">
+#      <Submenu name = "Metrics">
+#       <Item name="Get All Imaris Statistics" icon="Python" tooltip="Get all Statistics from Imaris for a selectd surface">
+#        <Command>PythonXT::XT_GetStats(%i)</Command>
+#       </Item>
+#      </Submenu>
+#     </Menu>
 #    </CustomTools>
 
 
@@ -122,7 +126,7 @@ def XT_GetStats(aImarisId):
     ''')
     time.sleep(5)
 
-{% endhighlight %}
+```
 
 ---
 

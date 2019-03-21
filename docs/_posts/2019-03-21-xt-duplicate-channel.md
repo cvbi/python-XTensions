@@ -29,20 +29,20 @@ Trial
 
 ### Code
 
-{% highlight python %}
+```
 
-# Subtracting Channels
+# Imaris XTension
 #
 #  Copyright (C) 2018 Nilesh Patil <nilesh.patil@rochester.edu>, MIT license
 #
 #    <CustomTools>
-#      <Menu name = "Python plugins">
-#       <Submenu name = "Channel Mods">
-#        <Item name="Duplicate Channel" icon="Python" tooltip="Copy one channel and append to the list">
-#         <Command>PythonXT::XT_duplicate_channel(%i)</Command>
-#        </Item>
-#       </Submenu>
-#      </Menu>
+#     <Menu name = "Python plugins">
+#      <Submenu name = "Channel Mods">
+#       <Item name="Duplicate Channel" icon="Python" tooltip="Copy one channel and append to the list">
+#        <Command>PythonXT::XT_duplicate_channel(%i)</Command>
+#       </Item>
+#      </Submenu>
+#     </Menu>
 #    </CustomTools>
 
 
@@ -108,8 +108,7 @@ def XT_duplicate_channel(aImarisId):
     ''')
     time.sleep(5)
 
-
-{% endhighlight %}
+```
 
 ---
 
