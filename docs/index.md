@@ -2,6 +2,13 @@
 
 This package is a collection of Imaris related tools at CVBI.
 
+Index 
+---
+- [Setup](#setup)
+
+
+#### Setup
+
 How to use this package :
 
 ```
