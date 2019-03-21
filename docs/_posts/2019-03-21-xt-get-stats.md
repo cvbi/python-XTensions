@@ -5,7 +5,8 @@ date:   2019-03-21 00:00:00
 categories: XTensions
 ---
 
-## Name : XT_get_stats
+Name : XT_get_stats
+---
 
 ---
 
@@ -15,19 +16,22 @@ categories: XTensions
 
 ---
 
-### Description
+Description
+---
 
 This XTension gets statistics from Imaris and saves them to a single csv file. 
 
 ---
 
-### Usage
+Usage
+---
 
 Trial
 
 ---
 
-### Code
+Code
+---
 
 ```
 
@@ -130,5 +134,7 @@ def XT_GetStats(aImarisId):
 
 ---
 
+Go back to [Home][go-back-to-home]
+---
 
 [go-back-to-home]: https://cvbi.github.io/python-XTensions
