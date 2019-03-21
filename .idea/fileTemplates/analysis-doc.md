@@ -5,7 +5,8 @@ date:   2019-03-21 00:00:00
 categories: Analysis
 ---
 
-## Name : Analysis flow
+Name : Analysis flow
+---
 
 ---
 
@@ -14,18 +15,21 @@ categories: Analysis
 
 ---
 
-### Description
+Description
+---
 
 This XTension creates a duplicate copy of the original cahnnel and adds a new channel with thius copy.
 
 ---
 
-### Usage
+Usage
+---
 
 Trial
 
 ---
 
-## Go back to [Home page][go-back-to-home]
+Go back to [Home page][go-back-to-home]
+---
 
 [go-back-to-home]: https://cvbi.github.io/python-XTensions
