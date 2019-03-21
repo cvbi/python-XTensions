@@ -2,7 +2,9 @@
 <project version="4">
   <component name="ExportableFileTemplateSettings">
     <default_templates>
+      <template name="analysis-doc.md" reformat="false" live-template-enabled="false" />
       <template name="xtension-code.py" reformat="false" live-template-enabled="false" />
+      <template name="xtension-doc.md" reformat="false" live-template-enabled="false" />
     </default_templates>
   </component>
 </project>

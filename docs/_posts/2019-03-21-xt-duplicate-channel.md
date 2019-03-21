@@ -5,7 +5,8 @@ date:   2019-03-21 00:00:00
 categories: XTensions
 ---
 
-## Name : XT_duplicate_channel
+Name : XT_duplicate_channel
+---
 
 ---
 
@@ -15,19 +16,22 @@ categories: XTensions
 
 ---
 
-### Description
+Description
+---
 
 This XTension creates a duplicate copy of the original cahnnel and adds a new channel with this copy.
 
 ---
 
-### Usage
+Usage
+---
 
 Trial
 
 ---
 
-### Code
+Code
+---
 
 ```
 
@@ -112,6 +116,7 @@ def XT_duplicate_channel(aImarisId):
 
 ---
 
-## Go back to [Home page][go-back-to-home]
+Go back to [Home][go-back-to-home]
+---
 
 [go-back-to-home]: https://cvbi.github.io/python-XTensions
