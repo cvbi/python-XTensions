@@ -6,6 +6,7 @@ categories: XTensions
 ---
 
 ## Name : XT_duplicate_channel
+
 ---
 
 01. [Description](#description)
