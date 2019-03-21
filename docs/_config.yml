@@ -19,7 +19,6 @@ description: >- # this means to ignore newlines until "baseurl:"
   This package is a collection of Imaris related tools at CVBI.
 
 # Build settings
-markdown: github
 theme: jekyll-theme-cayman
 
 # Exclude from processing.
